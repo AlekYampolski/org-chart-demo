@@ -1,106 +1,111 @@
-var svgHeight = 900;
-var svgWidth = 900;
-var svgColor = "green";
-
-var myJSON = groups;
+var svgHeight = 1000;
+var svgWidth = 1000;
+var svgColor = '#eee';
 
 var svg = d3.select('svg')
-            .attr('height', svgHeight)
-            .attr('width', svgWidth)
-            .style('background', svgColor);
+                .attr('width', svgWidth)
+                .attr('height', svgHeight)
+                .style('background', svgColor);
+                
 
-var colors = {
-    room : "red",
-    faculty : 'aqua'
+/* Return list of group types */
+function getGroupList(){
+    var arr = []; 
+    groups.forEach( item => arr.push(item.type) );
+    return arr;
+}
+                
+/* Draw all groups */
+function drawGroupsAll(){
+    getGroupList().forEach(item => drawGroupSingle(item));
 }
 
-function renderGroup(groupType){
-    var group = myJSON.find(item => item.type === groupType);
+/* Draw a single group */
+function drawGroupSingle(groupType){
+    var listGroup = getGroupList();
+    if(!listGroup.includes(groupType))return false;
+
+    var group = groups.find(item => item.type === groupType);
     var groupItems = group.items;
     var groupColor = group.color;
     var roomRender = svg.selectAll(`.circle--${groupType}`)
                         .data(groupItems)
-                        .enter()
-                        .append('circle')
+                        .enter();
+
+                        roomRender.append('circle')
                         .attr('id', d => d.id)
                         .attr('class', `circle--${groupType}`)
-                        .attr('cx', (d) => d.descr.x)
-                        .attr('cy', (d) => d.descr.y)
-                        .attr('r', (d) =>  d.descr.r)
-                        .style('fill', groupColor)
-                        .on('click', (e, d) => {showPets(e,d)})
+                        .attr('cx', (d) => d.position.x)
+                        .attr('cy', (d) => d.position.y)
+                        .attr('r', (d) =>  d.position.r)
+                        .style('fill', groupColor);
+
+                        roomRender.append('text')
+                        .text(d => d.name)
+                        .attr('x', d => d.position.x - d.position.r)
+                        .attr('y', d => d.position.y)
+                       
 }
 
-function showPets(e){
-    var id = e.id;
-    var typeG = id.split('-')[0];
-
-    if(typeG === "faculty"){
-
-        var pets = animals.pets;
-        /* Find all pets belong to group */
-        var petsData = pets.filter( item => {var someTest = item.petGroups.faculty === id
-            return someTest;
-        });
-        
-        renderPets(petsData, e)
-    } 
-
-    if(typeG === "room"){
-        svg.selectAll(`line.${id}`)
-            .attr('stroke', 'black');
-    }
-
+/* Return array of people belonging to group-id */
+function getPeopleByGroupId(id){
+    var subId = id.split('-')[0];
+    var arr = [];
+    ppl.forEach(items => {
+       if(items.groups[subId] === id){
+           arr.push(items);
+       }
+    })
+    return arr;
 }
 
-function renderPets(petsData, e){
-    var groupCl = e.id
-    var pos = {x : 'null', y : 'null'};
-    svg.selectAll(`.circle--${groupCl}`)
-                        .data(petsData)
-                        .enter()
-                        .append('circle')
-                        .attr('id', d => d.id)
-                        .attr('class', `circle--${groupCl}`)
-                        .attr('cx', (d,i) => { var someX = e.descr.x - 2*(i+1)*20 - 5;
-                            d.pos.x = someX;
-                            return someX;    
-                        } )
-                        .attr('cy', (d,i) => { var someY = e.descr.y- e.descr.r - 20;
-                            d.pos.y = someY;
-                            return someY;
-                        })
-                        .attr('r', 20)
-                        .style('fill', d => d.color)
-                        .on('click', (d) => {
-                            connections(d)
-                        })
+/* Return a hybrid js object */
+function modefied(){
+    var newGroups = groups;
+    var nG = [];
+    groups.forEach(it => {
+        it.items.forEach(subIt => {
+            var ar = getPeopleByGroupId(subIt.id);
+            subIt.ppl = ar;
+            nG.push(subIt);
+        })
+    })
+    return nG;
 }
 
-function connections(d){
-    // var pos = positionCalc;
-    var typeRoom = d.petGroups.room;
-    if(Object.prototype.toString.call( typeRoom ) === '[object Array]' && typeRoom.length > 0){
-        typeRoom.forEach(element => {
-            var group = myJSON[0].items.find(item => { var someT = item.id === element.name
-                return someT;
-            });
-            svg.append("line")
-             .attr('class',`${group.id}`)
-            .attr('x1', group.descr.x)
-            .attr('y1', group.descr.y)
-            .attr('x2', d.pos.x)
-            .attr('y2', d.pos.y)
-            .attr('stroke-width', 2)
-            .attr('stroke-dasharray', (3,3))
-            .attr('stroke', 'black')
-        });
-      
-    } else return;
+
+/* Draw small circles around "Main Element" 
+    modifiedEl - hybrid object. Group item + relative people
+            {   
+                id: "squads-1"
+                name: "dolor ac nunc tristique"
+                position: {x: 820, y: 158, r: 43}
+                ppl: [{…}]
+            }
+*/
+function renderPplForEl(modifiedEl){
+    var ppl = modifiedEl.ppl;
+    var id = modifiedEl.id;
+    var rParent = modifiedEl.position.r;
+    var xParent = modifiedEl.position.x;
+    var yParent = modifiedEl.position.y;
+    var arrLength = modifiedEl.ppl.length;
+    if(arrLength == 0) return;
+    svg.selectAll(`circle.${id}`)
+                .data(ppl)
+                .enter()
+                .append('circle')
+                .attr('class', `${id}-ppl`)
+                .attr('cx', (d,i) => (rParent +25 )*Math.cos(2*Math.PI/arrLength*(i+1)) + xParent)
+                .attr('cy', (d,i) => (rParent + 25 )*Math.sin(2*Math.PI/arrLength*(i+1)) + yParent)
+                .attr('r', 10)
+                .style('fill', d => d.color)
 }
 
-function lineInvis(){
-    svg.selectAll('line')
-        .attr('stroke', svgColor)
+/* Draw all people belonging to groups */
+function doIt(){
+    var el = modefied();
+    el.forEach(el => {
+        renderPplForEl(el);
+    })
 }
-
