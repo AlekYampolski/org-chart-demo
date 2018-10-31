@@ -6,3 +6,5 @@
 3)Command in console: lineInvis() => Color of relationship lines will change to svg.background
 
 4)Click on 'red' circle (room) => relationship lines show up ( Only after step number 2 {2)} )
+
+5) You can change items position (x,y) in groups.js file
