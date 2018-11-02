@@ -9,113 +9,91 @@ function drawSVGMain(sWidth, sHeight, sColor){
                 .style('background', sColor);
 }
 
-/* Draw all groups */
-function drawGroupsAll(){
-    // gList[`single`].forEach(item => {
-    //     drawGroup(item, 'single')
-    // })
+function drawGroupByIt(groupId, singOrMult, groupsData, svgEl){
+
+    if(singOrMult !== "single" && singOrMult !== "multiple") return false;
     
-    gList['multiple'].forEach(item => {
-        drawGroup(item, 'multiple')
-    })
+    var groupType = groupId.split('-')[0];
+    var groupElement = groupsData[`${singOrMult}`][`${groupType}`];
+    var color = groupElement.color;
+
+    if(typeof groupElement === 'undefined') return false; 
+    var groupElementId = groupElement.items.find(item => item.id == groupId);
+    if(typeof groupElementId === 'undefined') return false;
+    
+    var selection = svgEl.selectAll(`g#${groupId}`)
+        .data([groupElementId])
+        .enter()
+        .append('g')
+        .attr('id', groupId)
+        
+
+    var circle =  selection.append('circle')
+        .attr('cx', d => d.position.x)
+        .attr('cy', d => d.position.y)
+        .attr('r', d => d.position.r)
+        .style('fill',color)
+        // .attr()
+    var text = selection.append('text')
+                .text(d => d.name)
+                .attr('x', d => d.position.x - d.position.r)
+                .attr('y', d => d.position.y)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "20px")
+                .attr("fill", "red");
+
+    return {
+        selection,
+        position : groupElementId.position
+    }
+
 }
 
+/* +++++++ */
+var mod = modJSON(groups, ppl);
+// drawGroupByIt('faculties-1', 'single', groups, svg);
 
-
-/* Draw a single group */
-function drawGroup(groupName, groupType){
-    var group = groupNameValidation(groupName, groupType);
-    if(group === false) return 'Problems with groupName-groupType'
-
-    // var group = group.items.find(item => {
-    //     item.type === groupName
-    // });
-    var groupItems = group.items;
-    var groupColor = group.color;
-
-    var groupSelection = svg.selectAll(`circle#${groupItems.id}`)
-                            .data(svg.selectAll(`circle#${groupItems.id}`))
-                            .enter();
-
-    groupSelection.append('circle')
-        .attr('id', d => d.id)
-        .attr('class', `circle--${groupType}`)
-        .attr('cx', (d) => d.position.x)
-        .attr('cy', (d) => d.position.y)
-        .attr('r', (d) =>  d.position.r)
-        .style('fill', groupColor);
-
-    groupSelection.append('text')
-            .text(d => d.name)
-            .attr('x', d => d.position.x - d.position.r)
-            .attr('y', d => d.position.y)               
+function drawPplCircles(groupId, typeSM, mod, groupsData, svgEl){
+    var pplItems;
+    var selection = null;
+    if(typeSM === 'single'){
+        pplItems = mod.objsSingleArr.find(item => item.groupId === groupId);
+    }
+    
+    if(typeSM === 'multiple'){
+        pplItems = mod.objsMultiArr.find(item => item.groupId === groupId);
+    }
+    
+    if(pplItems === undefined) return false;
+    selection = drawGroupByIt(pplItems.groupId, typeSM, groupsData, svgEl);
+    drawIt(selection, pplItems);
 }
 
-/* Draw small circles around "Main Element" 
-    modifiedEl - hybrid object. Group item + relative people
-            {   
-                id: "squads-1"
-                name: "dolor ac nunc tristique"
-                position: {x: 820, y: 158, r: 43}
-                ppl: [{…}]
-            }
-*/
-function renderPplForEl(modifiedEl){
-    var ppl = modifiedEl.ppl;
-    var id = modifiedEl.id;
-    var rParent = modifiedEl.position.r;
-    var xParent = modifiedEl.position.x;
-    var yParent = modifiedEl.position.y;
-    var arrLength = modifiedEl.ppl.length;
-    if(arrLength == 0) return;
-    svg.selectAll(`circle.${id}`)
+function drawIt(selection, pplItems){
+    var ppl = pplItems.pplItems;
+    var id = pplItems.groupId;
+    // var rParent = circle;
+    var arrLength = ppl.length;
+    var selEl = selection.selection;
+    var rParent = selection.position.r;
+    var xParent = selection.position.x;
+    var yParent = selection.position.y;
+    selEl.append('g')
+                .selectAll(`circle.${id}--ppl`)
                 .data(ppl)
                 .enter()
                 .append('circle')
-                .attr('class', `${id}-ppl`)
+                .attr('id', d => d.id)
+                .attr('class', `${id}--ppl`)
                 .attr('cx', (d,i) => (rParent +25 )*Math.cos(2*Math.PI/arrLength*(i+1)) + xParent)
                 .attr('cy', (d,i) => (rParent + 25 )*Math.sin(2*Math.PI/arrLength*(i+1)) + yParent)
                 .attr('r', 10)
                 .style('fill', d => d.color)
 }
 
-/* Draw all people belonging to groups */
-function doIt(ty){
-    var el = modefied();
-    el.forEach(el => {
-        renderPplForEl(el);
-    })
-}
 
+/* 
+    Panel
+*/
 
-/* Draw panel */
-// function drawPanel(){
-//     d3.select('body')
-//         .selectAll('svg#panel')
-//         .data([panelControl])
-//         .enter()
-//         .append('svg')
-//             .attr('id', "panel")
-//             .attr('width', d => { 
-//                 return d.width
-//             })
-//             .attr('height', d => { 
-//                 return d.height
-//             })
-//             .attr('x', d => d.pos.x)
-//             .attr('y', d=> d.pos.y)
-//             .style('background', d => d.color);
-
-//     drawPanelItems(svg, gList)
-// }
-
-// /* Draw panel items */
-// function drawPanelItems(svgEl, data){
-//     var singleItems = svgEl.selectAll('div#single-panel')
-//                         .data([data.single])
-//                         .enter()
-//                         .append('div')
-//                         .attr('id', 'single-panel')
-
-//     // singleItems.selectAll('rect')
-// }
+var svgP = d3.select('svg#panel-1');

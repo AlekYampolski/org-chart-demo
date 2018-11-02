@@ -1,7 +1,6 @@
 var groups = {
-  single: [
-    {
-      type: "squads",
+  single: {
+    squads : {
       color: "pink",
       items: [
         {
@@ -33,9 +32,8 @@ var groups = {
         }
       ]
     },
-    {
-      type: "faculties",
-      color: "green",
+    faculties : {
+      color : "green",
       items: [
         {
           id: "faculties-1",
@@ -48,9 +46,8 @@ var groups = {
         }
       ]
     },
-    {
-      type: "agencies",
-      color: "lightpink",
+    agencies : {
+      color : "lightpink",
       items: [
         {
           id: "agencies-1",
@@ -63,11 +60,10 @@ var groups = {
         }
       ]
     }
-  ],
-  multiple: [
-    {
-      type: "councils",
-      color: "blue",
+  },
+  multiple: {
+    councils : {
+      color : "blue",
       items: [
         {
           id: "councils-1",
@@ -98,8 +94,7 @@ var groups = {
         }
       ]
     },
-    {
-      type: "clubs",
+    clubs : {
       color: "orange",
       items: [
         {
@@ -122,5 +117,5 @@ var groups = {
         }
       ]
     }
-  ]
+  }
 };

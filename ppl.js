@@ -4,9 +4,9 @@ var ppl = [
     name: "scott",
     color: "tomato",
     groups: {
-      faculties: "faculties-1",
+      faculties: "faculties-5",
       squads: "squads-1",
-      agencies: "",
+      agencies: null,
       councils: ["councils-2", "councils-3"],
       clubs: ["clubs-1"]
     }
@@ -16,9 +16,9 @@ var ppl = [
     name: "dread",
     color: "orangered",
     groups: {
-      faculties: "",
+      faculties: null,
       squads: "squads-3",
-      agencies: "",
+      agencies: null,
       councils: ["councils-1"],
       clubs: ["clubs-1", "clubs-2", "clubs-3"]
     }
@@ -30,8 +30,8 @@ var ppl = [
     groups: {
       faculties: "faculties-1",
       squads: "squads-2",
-      agencies: "agencies-1",
-      councils: ["councils-2", "councils-2"],
+      agencies: null,
+      councils: ["councils-2", "councils-3"],
       clubs: ["clubs-1"]
     }
   },
