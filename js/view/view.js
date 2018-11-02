@@ -1,8 +1,19 @@
+/* Init main svg */
+var svg = drawSVGMain(svgPar.svgWidth, svgPar.svgHeight, svgPar.svgColor);
+
+/* Draw SVG for Circles and return it */
+function drawSVGMain(sWidth, sHeight, sColor){
+    return   svg = d3.select('svg')
+                .attr('width', sWidth)
+                .attr('height', sHeight)
+                .style('background', sColor);
+}
+
 /* Draw all groups */
 function drawGroupsAll(){
-    gList[`single`].forEach(item => {
-        drawGroup(item, 'single')
-    })
+    // gList[`single`].forEach(item => {
+    //     drawGroup(item, 'single')
+    // })
     
     gList['multiple'].forEach(item => {
         drawGroup(item, 'multiple')
@@ -13,17 +24,17 @@ function drawGroupsAll(){
 
 /* Draw a single group */
 function drawGroup(groupName, groupType){
-    groupNameValidation(groupName, groupType);
-    if(groupNameValidation === false) return 'Problems with groupName-groupType'
+    var group = groupNameValidation(groupName, groupType);
+    if(group === false) return 'Problems with groupName-groupType'
 
-    var group = groups.find(item => {
-        item.type === groupName
-    });
+    // var group = group.items.find(item => {
+    //     item.type === groupName
+    // });
     var groupItems = group.items;
     var groupColor = group.color;
 
-    var groupSelection = svg.selectAll(`.circle--${groupType}`)
-                            .data(groupItems)
+    var groupSelection = svg.selectAll(`circle#${groupItems.id}`)
+                            .data(svg.selectAll(`circle#${groupItems.id}`))
                             .enter();
 
     groupSelection.append('circle')
@@ -69,9 +80,42 @@ function renderPplForEl(modifiedEl){
 }
 
 /* Draw all people belonging to groups */
-function doIt(){
+function doIt(ty){
     var el = modefied();
     el.forEach(el => {
         renderPplForEl(el);
     })
 }
+
+
+/* Draw panel */
+// function drawPanel(){
+//     d3.select('body')
+//         .selectAll('svg#panel')
+//         .data([panelControl])
+//         .enter()
+//         .append('svg')
+//             .attr('id', "panel")
+//             .attr('width', d => { 
+//                 return d.width
+//             })
+//             .attr('height', d => { 
+//                 return d.height
+//             })
+//             .attr('x', d => d.pos.x)
+//             .attr('y', d=> d.pos.y)
+//             .style('background', d => d.color);
+
+//     drawPanelItems(svg, gList)
+// }
+
+// /* Draw panel items */
+// function drawPanelItems(svgEl, data){
+//     var singleItems = svgEl.selectAll('div#single-panel')
+//                         .data([data.single])
+//                         .enter()
+//                         .append('div')
+//                         .attr('id', 'single-panel')
+
+//     // singleItems.selectAll('rect')
+// }

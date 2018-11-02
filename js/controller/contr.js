@@ -47,13 +47,9 @@ function checkGroup(groupName){
 */
 
 function groupNameValidation(groupName, groupType){
-    /* Validation 
-    if 
-    */
-    if(checkGroup(groupName) && gList[`${groupType}`] !== undefined){
-        if(gList[`${groupType}`].includes(`${groupName}`)){
-            return {groupName, groupType};
-        }   
+    var dataForGroup = groups[`${groupType}`].find(item => item.type === groupName);
+    if(dataForGroup){
+        return dataForGroup;
     }
     return false
 }

@@ -5,17 +5,21 @@ var svgPar = {
     svgColor : '#eee'
 }
 
+/* Panel settings */
+var panelControl = {
+    height : 250,
+    width : 250,
+    color : 'yellow',
+    pos : {
+        x : svgPar.svgHeight + 250,
+        y : 30
+    }
+
+}
+
 /* Group settings */
 var gList = {
     single : ["squads", "faculties", "agencies"],
-    multiple : ["council", "clubs"]
+    multiple : ["councils", "clubs"]
 }
 
-function getSVGSelection(sWidth, sHeight, sColor){
-    return   svg = d3.select('svg')
-                .attr('width', sWidth)
-                .attr('height', sHeight)
-                .style('background', sColor);
-}
-
-var svg = getSVGSelection(svgPar.svgWidth, svgPar.svgHeight, svgPar.svgColor);
