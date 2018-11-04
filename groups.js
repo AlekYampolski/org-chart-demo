@@ -5,7 +5,7 @@ var groups = {
       items: [
         {
           id: "squads-1",
-          name: "dolor ac nunc tristique",
+          name: "s-1",
           position: {
             x: 820,
             y: 158,
@@ -14,7 +14,7 @@ var groups = {
         },
         {
           id: "squads-2",
-          name: "elementum sapien maximus",
+          name: "s-2",
           position: {
             x: 420,
             y: 750,
@@ -23,7 +23,7 @@ var groups = {
         },
         {
           id: "squads-3",
-          name: "metus erat",
+          name: "s-3",
           position: {
             x: 220,
             y: 350,
@@ -37,7 +37,7 @@ var groups = {
       items: [
         {
           id: "faculties-1",
-          name: "tempor neque",
+          name: "f-1",
           position: {
             x: 480,
             y: 640,
@@ -51,7 +51,7 @@ var groups = {
       items: [
         {
           id: "agencies-1",
-          name: "quis purus rhoncus",
+          name: "a-1",
           position: {
             x: 840,
             y: 640,
@@ -67,7 +67,7 @@ var groups = {
       items: [
         {
           id: "councils-1",
-          name: "orci mi",
+          name: "cn-1",
           position: {
             x: 320,
             y: 540,
@@ -76,7 +76,7 @@ var groups = {
         },
         {
           id: "councils-2",
-          name: "sit amet imperdiet",
+          name: "cn-2",
           position: {
             x: 120,
             y: 840,
@@ -85,7 +85,7 @@ var groups = {
         },
         {
           id: "councils-3",
-          name: "facilisis quis purus",
+          name: "cn-3",
           position: {
             x: 725,
             y: 240,
@@ -99,7 +99,7 @@ var groups = {
       items: [
         {
           id: "clubs-1",
-          name: "Quis quam eget",
+          name: "cb-1",
           position: {
             x: 100,
             y: 100,
@@ -108,7 +108,7 @@ var groups = {
         },
         {
           id: "clubs-2",
-          name: "Malesuada eu non",
+          name: "cb-2",
           position: {
             x: 245,
             y: 725,
